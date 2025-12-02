@@ -9,6 +9,8 @@ on:
 jobs:
   keepalive:
     runs-on: ubuntu-latest
+    permissions:
+      contents: none # No repository access needed
     strategy:
       matrix:
         space:
