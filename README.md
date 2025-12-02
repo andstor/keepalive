@@ -19,7 +19,7 @@ strategy:
 4. The workflow will automatically run once a day at 00:00 UTC
 5. You can also manually trigger it from the Actions tab
 
-**Note:** The workflow includes `example-user/example-space` by default. Replace this with your actual spaces.
+**Note:** The workflow includes `example-user/example-space` by default, which will fail until you replace it with your actual spaces. This is intentional to prevent empty matrix errors.
 
 ## How it works
 
