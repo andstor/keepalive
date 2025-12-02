@@ -1,0 +1,37 @@
+name: Keep Hugging Face Spaces Alive
+
+on:
+  schedule:
+    # Run once a day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        space:
+          # Add your spaces here in the format: username/spacename
+          # - username1/spacename1
+          # - username2/spacename2
+      fail-fast: false # Continue even if one space fails
+    
+    steps:
+      - name: Ping Hugging Face Space
+        run: |
+          # Convert username/spacename to URL format
+          SPACE="${{ matrix.space }}"
+          USERNAME=$(echo $SPACE | cut -d'/' -f1)
+          SPACENAME=$(echo $SPACE | cut -d'/' -f2)
+          URL="https://${SPACENAME}-${USERNAME}.hf.space/health"
+          
+          echo "Pinging: $URL"
+          
+          # Curl with timeout and fail on error
+          if curl -f -s -m 10 "$URL"; then
+            echo "✓ Successfully pinged $SPACE"
+          else
+            echo "⚠ Failed to ping $SPACE (this is not critical)"
+            exit 0 # Don't fail the job if a space is down
+          fi
