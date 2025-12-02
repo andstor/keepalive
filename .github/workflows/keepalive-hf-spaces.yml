@@ -28,7 +28,7 @@ jobs:
           SPACE="${{ matrix.space }}"
           USERNAME=$(echo $SPACE | cut -d'/' -f1)
           SPACENAME=$(echo $SPACE | cut -d'/' -f2)
-          URL="https://${SPACENAME}-${USERNAME}.hf.space/health"
+          URL="https://${USERNAME}-${SPACENAME}.hf.space/health"
           
           echo "Pinging: $URL"
           
