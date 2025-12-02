@@ -22,6 +22,7 @@ jobs:
     
     steps:
       - name: Ping Hugging Face Space
+        continue-on-error: true # Don't fail workflow if a space is down
         run: |
           # Convert username/spacename to URL format
           SPACE="${{ matrix.space }}"
@@ -32,13 +33,12 @@ jobs:
           echo "Pinging: $URL"
           
           # Curl with timeout (10s) and capture HTTP status code
+          # Returns "000" if connection fails or times out
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 10 "$URL" || echo "000")
           
           if [ "$HTTP_CODE" = "200" ]; then
             echo "✓ Successfully pinged $SPACE (HTTP 200)"
           else
             echo "⚠ Received HTTP $HTTP_CODE from $SPACE (space may be sleeping or unavailable)"
+            exit 1
           fi
-          
-          # Always exit successfully to not fail the workflow
-          exit 0
