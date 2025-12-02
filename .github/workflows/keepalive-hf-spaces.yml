@@ -1,0 +1,45 @@
+name: Keep Hugging Face Spaces Alive
+
+on:
+  schedule:
+    # Run once a day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: none # No repository access needed
+    strategy:
+      matrix:
+        space:
+          # Add your spaces here in the format: username/spacename
+          # Example:
+          # - huggingface/chat-ui
+          - andstor/Florence-2
+      fail-fast: false # Continue even if one space fails
+    
+    steps:
+      - name: Ping Hugging Face Space
+        continue-on-error: true # Don't fail workflow if a space is down
+        run: |
+          # Convert username/spacename to URL format
+          SPACE="${{ matrix.space }}"
+          USERNAME=$(echo $SPACE | cut -d'/' -f1)
+          SPACENAME=$(echo $SPACE | cut -d'/' -f2)
+          URL="https://${SPACENAME}-${USERNAME}.hf.space/health"
+          
+          echo "Pinging: $URL"
+          
+          # Curl with timeout (10s) and capture HTTP status code
+          # Returns "000" if connection fails or times out (curl convention)
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 10 "$URL" || echo "000")
+          
+          # Accept any 2xx status code as success
+          if [[ "$HTTP_CODE" =~ ^2[0-9][0-9]$ ]]; then
+            echo "✓ Successfully pinged $SPACE (HTTP $HTTP_CODE)"
+          else
+            echo "⚠ Received HTTP $HTTP_CODE from $SPACE (space may be sleeping or unavailable)"
+            exit 1
+          fi
