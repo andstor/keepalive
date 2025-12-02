@@ -17,9 +17,7 @@ jobs:
           # Add your spaces here in the format: username/spacename
           # Example:
           # - huggingface/chat-ui
-          # - username1/spacename1
-          # - username2/spacename2
-          - example-user/example-space
+          - andstor/Florence-2
       fail-fast: false # Continue even if one space fails
     
     steps:
