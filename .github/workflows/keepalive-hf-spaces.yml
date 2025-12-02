@@ -14,9 +14,7 @@ jobs:
     strategy:
       matrix:
         space:
-          # Add your spaces here in the format: username/spacename
-          # Example:
-          # - huggingface/chat-ui
+          - andstor/deepspeed-model-memory-usage
           - andstor/Florence-2
       fail-fast: false # Continue even if one space fails
     
