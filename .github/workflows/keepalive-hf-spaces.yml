@@ -9,14 +9,9 @@ on:
 jobs:
   keepalive:
     runs-on: ubuntu-latest
-    permissions:
-      contents: none # No repository access needed
     strategy:
       matrix:
         space:
-          # Add your spaces here in the format: username/spacename
-          # Example:
-          # - huggingface/chat-ui
           - andstor/Florence-2
       fail-fast: false # Continue even if one space fails
     
