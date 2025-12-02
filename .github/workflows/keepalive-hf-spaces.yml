@@ -13,8 +13,11 @@ jobs:
       matrix:
         space:
           # Add your spaces here in the format: username/spacename
+          # Example:
+          # - huggingface/chat-ui
           # - username1/spacename1
           # - username2/spacename2
+          - example-user/example-space
       fail-fast: false # Continue even if one space fails
     
     steps:
@@ -28,10 +31,14 @@ jobs:
           
           echo "Pinging: $URL"
           
-          # Curl with timeout and fail on error
-          if curl -f -s -m 10 "$URL"; then
-            echo "✓ Successfully pinged $SPACE"
+          # Curl with timeout (10s) and capture HTTP status code
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 10 "$URL" || echo "000")
+          
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✓ Successfully pinged $SPACE (HTTP 200)"
           else
-            echo "⚠ Failed to ping $SPACE (this is not critical)"
-            exit 0 # Don't fail the job if a space is down
+            echo "⚠ Received HTTP $HTTP_CODE from $SPACE (space may be sleeping or unavailable)"
           fi
+          
+          # Always exit successfully to not fail the workflow
+          exit 0

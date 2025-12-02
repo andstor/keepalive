@@ -6,7 +6,7 @@ A GitHub workflow to keep Hugging Face Spaces alive by pinging them daily.
 
 1. Fork or clone this repository
 2. Edit `.github/workflows/keepalive-hf-spaces.yml`
-3. Add your Hugging Face spaces to the matrix in the format `username/spacename`:
+3. Replace the example space with your Hugging Face spaces in the format `username/spacename`:
 
 ```yaml
 strategy:
@@ -18,6 +18,8 @@ strategy:
 
 4. The workflow will automatically run once a day at 00:00 UTC
 5. You can also manually trigger it from the Actions tab
+
+**Note:** The workflow includes `example-user/example-space` by default. Replace this with your actual spaces.
 
 ## How it works
 
