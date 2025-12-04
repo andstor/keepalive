@@ -18,6 +18,8 @@ jobs:
           - andstor/model-memory-usage
           - andstor/deepspeed-model-memory-usage
           - andstor/Florence-2
+          - andstor/phoenix-cvevc_candidates_random_10
+          - andstor/phoenix-cvevc_candidates_PatchFinder_top10
       fail-fast: false # Continue even if one space fails
     
     steps:
@@ -26,8 +28,8 @@ jobs:
         run: |
           # Convert username/spacename to URL format
           SPACE="${{ matrix.space }}"
-          USERNAME=$(echo $SPACE | cut -d'/' -f1)
-          SPACENAME=$(echo $SPACE | cut -d'/' -f2)
+          USERNAME=$(echo $SPACE | cut -d'/' -f1 | tr '_' '-')
+          SPACENAME=$(echo $SPACE | cut -d'/' -f2 | tr '_' '-')
           URL="https://${USERNAME}-${SPACENAME}.hf.space/health"
           
           echo "Pinging: $URL"
